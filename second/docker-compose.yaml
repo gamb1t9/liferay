@@ -1,0 +1,33 @@
+version: '3'
+services:
+  apache:
+    image: httpd:latest
+    container_name: apache
+    hostname: apache
+    ports:
+      - 80:80
+    volumes:
+      - ./liferay.conf:/usr/local/apache2/conf/extra/liferay.conf
+      - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
+    entrypoint: sh /usr/local/bin/entrypoint.sh
+ 
+  backend1:
+    image: liferay/dxp:latest
+    container_name: backend1
+    hostname: backend1
+    ports:
+     - 8181
+    environment:
+      - LIFERAY_TOMCAT_AJP_PORT=8181
+      - LIFERAY_TOMCAT_JVM_ROUTE=backend1
+      - LIFERAY_WEB_SERVER_DISPLAY_NODE=true
+  backend2:
+    image: liferay/dxp:latest
+    container_name: backend2
+    hostname: backend2
+    ports:
+    - 8282
+    environment:
+      - LIFERAY_TOMCAT_AJP_PORT=8282
+      - LIFERAY_TOMCAT_JVM_ROUTE=backend2
+      - LIFERAY_WEB_SERVER_DISPLAY_NODE=true
